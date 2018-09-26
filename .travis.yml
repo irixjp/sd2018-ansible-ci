@@ -3,12 +3,12 @@ sudo: required
 language: python
 python:
   - "2.7"
-  - "3.6"
+#  - "3.6"
 env:
   matrix:
     - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
-    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
-    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=6.10     INIT="tail -f /dev/null"
+#    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
+#    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=6.10     INIT="tail -f /dev/null"
 
 services:
   - docker

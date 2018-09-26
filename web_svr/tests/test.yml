@@ -1,11 +1,8 @@
 - name: unit test for the role
   hosts: all
-  vars:
-    role_name: web_server
   tasks:
-    - name: Run role tasks from "{{ item }}"
-      include_role:
-        name: web_server
+    - include_role:
+        name: web_svr
         tasks_from: "{{ item }}"
       with_items:
         - main
