@@ -1,11 +1,9 @@
 ---
 sudo: required
 env:
-  - ROLE=office_site_setup
-  - ROLE=check_website
-  - matrix:
-      - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.3
-      - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.2
+  matrix:
+    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.3
+    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.2
 
 services:
   - docker
@@ -16,19 +14,18 @@ before_install:
   - sudo service docker restart
   - sleep 5
   - sudo docker pull ${OS_TYPE}:${OS_VERSION}
+  - sudo pip install -U pip setuptools
+  - sudo pip install ansible==${ANSIBLE_VERSION}
+  - ansible --version
   - export CONTAINER_ID=$(date +%s)
   - export TEST_DIR="/tmp/ansible_test_runner"
 
 script:
-  - echo SCRIPT
-  - echo $ROLE
-  - echo $OS_TYPE
-  - echo $OS_VERSION
-  - echo $ANSIBLE_VERSION
+  - echo $opts
   - docker run --detach --privileged --volume="$PWD":$TEST_DIR:rw --name $CONTAINER_ID $opts ${OS_TYPE}:${OS_VERSION} /sbin/init
-  - docker exec $CONTAINER_ID /bin/bash -c "cd $TEST_DIR/tests && ls -alF"
-  - docker exec $CONTAINER_ID /bin/bash -c "yum install -y epel-release && yum install -y ansible-$ANSIBLE_VERSION"
-  - docker exec $CONTAINER_ID /bin/bash -c "yum install -y epel-release && yum install -y ansible-$ANSIBLE_VERSION"
+  - echo ${CONTAINER_ID} > inventory
+  - cat inventory
   - docker ps -a
+  - ansible all -i inventory -m shell -a 'hostname'
   - ls -alF
   - docker exec $CONTAINER_ID /bin/bash -c "systemctl -a"
