@@ -1,7 +1,7 @@
 - name: unit test for the role
-  hosts: localhost
+  hosts: all
   vars:
-    role_name: official_site_build
+    role_name: web_server
   tasks:
     - name: run main playbook
       include_role:
