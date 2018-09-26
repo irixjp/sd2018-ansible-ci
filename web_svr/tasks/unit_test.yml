@@ -26,6 +26,6 @@
   uri:
     url: http://localhost/
     follow_redirects: none
-    status_code: 301
+    status_code: 200
   register: result.url
   ignore_errors: yes
