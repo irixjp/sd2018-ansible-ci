@@ -1,0 +1,21 @@
+---
+sudo: required
+env:
+  matrix:
+    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.3
+    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.2
+
+services:
+  - docker
+
+before_install:
+  - echo BEFORE
+  - echo $OS_TYPE
+  - echo $OS_VERSION
+  - echo $ANSIBLE_VERSION
+
+script:
+  - echo SCRIPT
+  - echo $OS_TYPE
+  - echo $OS_VERSION
+  - echo $ANSIBLE_VERSION

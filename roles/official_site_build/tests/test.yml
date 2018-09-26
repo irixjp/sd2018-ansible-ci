@@ -1,0 +1,14 @@
+- name: unit test for the role
+  hosts: localhost
+  vars:
+    role_name: official_site_build
+  tasks:
+    - name: run main playbook
+      include_role:
+        name: "{{ role_name }}"
+        tasks_from: main
+
+    - name: run unit test playbook
+      include_role:
+        name: "{{ role_name }}"
+        tasks_from: unit_test
