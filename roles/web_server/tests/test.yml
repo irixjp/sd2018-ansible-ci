@@ -3,7 +3,8 @@
   vars:
     role_name: web_server
   tasks:
-    - include_role:
+    - name: Run role tasks from "{{ item }}"
+      include_role:
         name: web_server
         tasks_from: "{{ item }}"
       with_items:
