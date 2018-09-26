@@ -26,6 +26,6 @@ script:
   - echo ${CONTAINER_ID} > inventory
   - cat inventory
   - docker ps -a
-  - ansible all -i inventory -m shell -a 'hostname'
+  - ansible all -i inventory -c docker -m shell -a 'hostname'
   - ls -alF
   - docker exec $CONTAINER_ID /bin/bash -c "systemctl -a"
