@@ -33,7 +33,8 @@ script:
   - ansible all -i ${INVENTORY_FILE} -c docker -m setup -a 'filter=ansible_distribution*'
 
   # Run tests.
-  - ansible-playbook -vvv -i ${INVENTORY_FILE} -c docker roles/web_server/tests/test.yml
+  - ansible-playbook -i ${INVENTORY_FILE} roles/web_server/tests/test.yml --syntax-check
+  - ansible-playbook -i ${INVENTORY_FILE} roles/web_server/tests/test.yml -c docker -v
 
 notifications:
   email: false

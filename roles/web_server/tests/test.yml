@@ -3,12 +3,9 @@
   vars:
     role_name: web_server
   tasks:
-    - name: run main playbook
-      import_role:
-        name: "{{ role_name }}"
-        tasks_from: main
-
-    - name: run unit test playbook
-      import_role:
-        name: "{{ role_name }}"
-        tasks_from: unit_test
+    - include_role:
+        name: web_server
+        tasks_from: "{{ item }}"
+      with_items:
+        - main
+        - unit_test
