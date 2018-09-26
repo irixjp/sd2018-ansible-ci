@@ -12,16 +12,19 @@ services:
   - docker
 
 before_install:
+  # Prepare Travis environment
   - sudo apt-get update
   - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
   - sudo docker pull ${OS_TYPE}:${OS_VERSION}
+  - export CONTAINER_ID=$(date +%s)
+  - export INVENTORY_FILE=${PWD}/inventory
+
+  # Install Ansible
   - sudo pip install -U pip setuptools
   - sudo pip install ansible==${ANSIBLE_VERSION}
   - ansible --version
-  - export CONTAINER_ID=$(date +%s)
-  - export INVENTORY_FILE=${PWD}/inventory
 
 script:
   # Prepare docker environment
@@ -30,7 +33,7 @@ script:
   - ansible all -i ${INVENTORY_FILE} -c docker -m setup -a 'filter=ansible_distribution*'
 
   # Run tests.
-  - ansible-playbook -i ${INVENTORY_FILE} -c docker roles/web_server/tests/test.yml
+  - ansible-playbook -vvv -i ${INVENTORY_FILE} -c docker roles/web_server/tests/test.yml
 
 notifications:
   email: false

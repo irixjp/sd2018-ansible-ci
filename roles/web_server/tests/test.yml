@@ -4,11 +4,11 @@
     role_name: web_server
   tasks:
     - name: run main playbook
-      include_role:
+      import_role:
         name: "{{ role_name }}"
         tasks_from: main
 
     - name: run unit test playbook
-      include_role:
+      import_role:
         name: "{{ role_name }}"
         tasks_from: unit_test
