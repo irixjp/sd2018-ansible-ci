@@ -1,25 +1,25 @@
 ---
 - name: Is httpd package installed?
   shell: rpm -qa | grep httpd-
-  register: result.rpm
+  register: result_rpm
   ignore_errors: yes
 
 - name: Is index.html is exist?
   shell: test -e /var/www/html/index.html
-  register: result.file
+  register: result_file
   ignore_errors: yes
 
 - name: Is httpd processes are started?
   shell: ps -ef | grep http[d]
-  register: result.proc
+  register: result_proc
   ignore_errors: yes
 
 - name: Is port 80 is opened?
   wait_for:
     host: localhost
     port: 80
-    timeout: 10
-  register: result.port
+    timeout: 1
+  register: result_port
   ignore_errors: yes
 
 - name: Does the server return 200 OK?
@@ -27,5 +27,15 @@
     url: http://localhost/
     follow_redirects: none
     status_code: 200
-  register: result.url
+  register: result_url
   ignore_errors: yes
+
+- name: check test results
+  assert:
+    that: "{{ item.failed == false }}"
+  with_items:
+    - "{{ result_rpm }}"
+    - "{{ result_file }}"
+    - "{{ result_proc }}"
+    - "{{ result_port }}"
+    - "{{ result_url }}"
