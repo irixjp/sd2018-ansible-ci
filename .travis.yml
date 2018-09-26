@@ -14,11 +14,10 @@ services:
 
 before_install:
   # Prepare Travis environment
-  - sudo apt-get update
+  - apt-get update
   - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
-  - sudo docker pull ${OS_TYPE}:${OS_VERSION}
   - export CONTAINER_ID=$(date +%s)
   - export INVENTORY_FILE=${PWD}/inventory
 
