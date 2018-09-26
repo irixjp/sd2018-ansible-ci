@@ -1,2 +1,31 @@
 ---
-- shell: echo test
+- name: Is httpd package installed?
+  shell: rpm -qa | grep httpd-
+  register: result.rpm
+  ignore_errors: yes
+
+- name: Is index.html is exist?
+  shell: test -e /var/www/html/index.html
+  register: result.file
+  ignore_errors: yes
+
+- name: Is httpd processes are started?
+  shell: ps -ef | grep http[d]
+  register: result.proc
+  ignore_errors: yes
+
+- name: Is port 80 is opened?
+  wait_for:
+    host: localhost
+    port: 80
+    timeout: 10
+  register: result.port
+  ignore_errors: yes
+
+- name: Does the server return 200 OK?
+  uri:
+    url: http://localhost/
+    follow_redirects: none
+    status_code: 301
+  register: result.url
+  ignore_errors: yes
