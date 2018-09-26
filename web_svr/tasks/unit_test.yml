@@ -33,7 +33,7 @@
 - name: check test results
   assert:
     that: "{{ result.failed == false }}"
-  with_items:
+  loop:
     - "{{ result_rpm }}"
     - "{{ result_file }}"
     - "{{ result_proc }}"
