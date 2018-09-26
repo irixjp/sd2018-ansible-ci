@@ -6,8 +6,9 @@ python:
   - "3.6"
 env:
   matrix:
-    - OS_TYPE=ANSIBLE_VERSION=2.6.3 centos OS_VERSION=7 INIT=/sbin/init
-    - OS_TYPE=ANSIBLE_VERSION=2.6.3 centos OS_VERSION=6 INIT="tail -f /dev/null"
+    - ANSIBLE_VERSION=2.6.3 OS_TYPE=centos OS_VERSION=7.5.1804 INIT=/sbin/init
+    - ANSIBLE_VERSION=2.6.3 OS_TYPE=centos OS_VERSION=7.4.1708 INIT=/sbin/init
+    - ANSIBLE_VERSION=2.6.3 OS_TYPE=centos OS_VERSION=6.10     INIT="tail -f /dev/null"
 
 services:
   - docker
@@ -26,12 +27,12 @@ before_install:
   - sudo pip install ansible==${ANSIBLE_VERSION}
   - ansible --version
 
-script:
   # Prepare docker environment
   - docker run --detach --privileged --name $CONTAINER_ID ${OS_TYPE}:${OS_VERSION} ${INIT}
   - echo ${CONTAINER_ID} > ${INVENTORY_FILE}
   - ansible all -i ${INVENTORY_FILE} -c docker -m setup -a 'filter=ansible_distribution*'
 
+script:
   # Run tests.
   - ansible-playbook -i ${INVENTORY_FILE} roles/web_server/tests/test.yml --syntax-check
   - ansible-playbook -i ${INVENTORY_FILE} roles/web_server/tests/test.yml -c docker -v
