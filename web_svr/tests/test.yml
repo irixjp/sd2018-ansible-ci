@@ -6,15 +6,4 @@
         name: web_svr
         tasks_from: "{{ item }}"
       with_items:
-        - main
-        - unit_test
-
-- name: unit test again for the role
-  hosts: all
-  tasks:
-    - include_role:
-        name: web_svr
-        tasks_from: "{{ item }}"
-      with_items:
-        - main
         - unit_test
