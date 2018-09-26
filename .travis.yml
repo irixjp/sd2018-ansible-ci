@@ -6,9 +6,9 @@ python:
 #  - "3.6"
 env:
   matrix:
-    - ANSIBLE_VERSION=2.6.3 OS_TYPE=centos OS_VERSION=7.5.1804 INIT=/sbin/init
-#    - ANSIBLE_VERSION=2.6.3 OS_TYPE=centos OS_VERSION=7.4.1708 INIT=/sbin/init
-#    - ANSIBLE_VERSION=2.6.3 OS_TYPE=centos OS_VERSION=6.10     INIT="tail -f /dev/null"
+    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
+#    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
+#    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=6.10     INIT="tail -f /dev/null"
 
 services:
   - docker
@@ -19,26 +19,25 @@ before_install:
   - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
-  - export CONTAINER_ID=$(date +%s)
-  - export INVENTORY_FILE=${PWD}/inventory
+  - export CON_ID=$(date +%s)
+  - export INV_FILE=${PWD}/inventory
 
   # Install Ansible
   - sudo pip install -U pip setuptools
-  - sudo pip install ansible==${ANSIBLE_VERSION}
+  - sudo pip install ansible==${ANS_VER}
 
   # Prepare docker environment
-  - docker run --detach --privileged --name $CONTAINER_ID ${OS_TYPE}:${OS_VERSION} ${INIT}
-  - echo ${CONTAINER_ID} > ${INVENTORY_FILE}
- 
+  - docker run -d --privileged --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
+  - echo ${CON_ID} > ${INV_FILE}
 
 script:
   # Check test environment
   - ansible --version
-  - ansible all -i ${INVENTORY_FILE} -c docker -m setup -a 'filter=ansible_distribution*'
+  - ansible all -c docker -m setup -a 'filter=ansible_distribution*'
 
-  # Run tests.
-  - ansible-playbook -i ${INVENTORY_FILE} roles/web_server/tests/test.yml --syntax-check
-  - ansible-playbook -i ${INVENTORY_FILE} roles/web_server/tests/test.yml -c docker -v
+  # Run tests
+  - ansible-playbook web_svr/tests/test.yml --syntax-check
+  - ansible-playbook web_svr/tests/test.yml -c docker -v
 
 notifications:
   email: false
