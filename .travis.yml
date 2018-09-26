@@ -1,12 +1,11 @@
 ---
 sudo: required
 env:
-  roles:
-    - office_site_setup
-    - check_web_site
-  matrix:
-    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.3
-    - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.2
+  - ROLE=office_site_setup
+  - ROLE=check_website
+  - matrix:
+      - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.3
+      - OS_TYPE=centos OS_VERSION=7 ANSIBLE_VERSION=2.6.2
 
 services:
   - docker
@@ -22,6 +21,7 @@ before_install:
 
 script:
   - echo SCRIPT
+  - echo $ROLE
   - echo $OS_TYPE
   - echo $OS_VERSION
   - echo $ANSIBLE_VERSION
