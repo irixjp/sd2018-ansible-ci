@@ -32,10 +32,12 @@
 
 - name: check test results
   assert:
-    that: "{{ item.failed == false }}"
+    that: "{{ result.failed == false }}"
   with_items:
     - "{{ result_rpm }}"
     - "{{ result_file }}"
     - "{{ result_proc }}"
     - "{{ result_port }}"
     - "{{ result_url }}"
+  loop_control:
+    loop_var: result

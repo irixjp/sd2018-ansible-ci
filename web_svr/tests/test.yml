@@ -6,4 +6,5 @@
         name: web_svr
         tasks_from: "{{ item }}"
       with_items:
+        - main
         - unit_test
