@@ -27,7 +27,7 @@ before_install:
   - sudo pip install -U pip setuptools
   - sudo pip install ansible==${ANS_VER}
 
-  # Prepare docker environment
+  # Prepare test environment
   - docker run -d --privileged --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
   - echo ${CON_ID} > ${INV_FILE}
 
