@@ -7,15 +7,20 @@ env:
   - ANS_VER: 2.6.3
     OS_TYPE: centos
     OS_VER: 7.5.1804
+    CON_OPTS: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     INIT: /sbin/init
-  - ANS_VER: 2.6.4
-    OS_TYPE: centos
-    OS_VER: 6.10
-    INIT: tail -f /dev/null
+
   - ANS_VER: 2.6.3
     OS_TYPE: centos
     OS_VER: 7.4.1708
+    CON_OPTS: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     INIT: /sbin/init
+
+  - ANS_VER: 2.6.4
+    OS_TYPE: centos
+    OS_VER: 6.10
+    CON_OPTS: --privileged
+    INIT: "tail -f /dev/null"
 
 services:
   - docker
@@ -34,7 +39,7 @@ before_install:
   - sudo pip install ansible==${ANS_VER}
 
   # Prepare test environment
-  - docker run -d --privileged --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
+  - docker run -d ${CON_OPTS} --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
   - echo ${CON_ID} > ${INV_FILE}
 
 script:
