@@ -3,16 +3,16 @@ sudo: required
 language: python
 python:
   - "2.7"
+services:
+  - docker
+
 env:
   matrix:
     - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
-    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.3.1611 INIT=/sbin/init
-    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
-    - ANS_VER=2.6.4 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
+#    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.3.1611 INIT=/sbin/init
+#    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
+#    - ANS_VER=2.6.4 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
 #    - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=6.10     INIT="tail -f /dev/null"
-
-services:
-  - docker
 
 before_install:
   # Prepare Travis environment
@@ -27,12 +27,12 @@ before_install:
   - sudo pip install -U pip setuptools
   - sudo pip install ansible==${ANS_VER}
 
-  # Prepare test environment
+  # Prepare test container
   - docker run -d --privileged --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
   - echo ${CON_ID} > ${INV_FILE}
 
 script:
-  # Check test environment
+  # Show test environment
   - ansible --version
   - ansible all -c docker -m setup -a 'filter=ansible_distribution*'
 
