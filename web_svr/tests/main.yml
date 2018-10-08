@@ -1,0 +1,9 @@
+---
+- name: unit test for the role
+  hosts: all
+  tasks:
+    - include_role:
+        name: web_svr
+        tasks_from: "{{ item }}"
+      with_items:
+        - main
