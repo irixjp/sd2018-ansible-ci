@@ -1,34 +1,35 @@
 ---
-- name: Is httpd package installed?
-  shell: rpm -qa | grep httpd-
-  register: result_rpm
-  ignore_errors: yes
+- ignore_errors: yes
+  block:
+  - name: Is httpd package installed?
+    shell: yum list installed | grep -e '^httpd\.'
+    register: result_rpm
 
-- name: Is index.html is exist?
-  shell: test -e /var/www/html/index.html
-  register: result_file
-  ignore_errors: yes
+  - name: Is index.html present?
+    shell: test -e /var/www/html/index.html
+    register: result_file
 
-- name: Is httpd processes are started?
-  shell: ps -ef | grep http[d]
-  register: result_proc
-  ignore_errors: yes
+  - name: Is httpd processe started?
+    shell: ps -ef | grep http[d]
+    register: result_proc
 
-- name: Is port 80 is opened?
-  wait_for:
-    host: localhost
-    port: 80
-    timeout: 3
-  register: result_port
-  ignore_errors: yes
+  - name: Is httpd service enabled?
+    shell: systemctl is-enabled httpd
+    register: result_enabled
 
-- name: Does the server return 200 OK?
-  uri:
-    url: http://localhost/
-    follow_redirects: none
-    status_code: 200
-  register: result_url
-  ignore_errors: yes
+  - name: Is port 80 opened?
+    wait_for:
+      host: localhost
+      port: 80
+      timeout: 3
+    register: result_port
+
+  - name: Does the server return 200 OK?
+    uri:
+      url: http://localhost/
+      follow_redirects: none
+      status_code: 200
+    register: result_url
 
 - name: check test results
   assert:
@@ -37,6 +38,7 @@
     - "{{ result_rpm }}"
     - "{{ result_file }}"
     - "{{ result_proc }}"
+    - "{{ result_enabled }}"
     - "{{ result_port }}"
     - "{{ result_url }}"
   loop_control:
