@@ -26,7 +26,7 @@ before_install:
   # Install Ansible
   - sudo pip install -U pip setuptools
   - sudo pip install ansible==${ANS_VER}
-  - ansible-galaxy install -p . benwebber.tap && cd benwebber.tap && make install
+  - ansible-galaxy install -c -p . benwebber.tap && cd benwebber.tap && make install
 
   # Prepare test container
   - docker run -d --privileged --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
