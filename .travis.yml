@@ -26,7 +26,13 @@ before_install:
   # Install Ansible
   - sudo pip install -U pip setuptools
   - sudo pip install ansible==${ANS_VER}
-  - ansible-galaxy install -c -p . benwebber.tap && cd benwebber.tap && make install
+
+  # Install Ansible-Tap
+  - PLUGINS_DIR=~/.ansible/plugins/callback
+  - mkdir -p ${PLUGINS_DIR}
+  - >
+    curl -o ${PLUGINS_DIR}/tap.py
+    https://raw.githubusercontent.com/benwebber/ansible-tap/master/library/callback_plugins/tap.py
 
   # Prepare test container
   - docker run -d --privileged --name ${CON_ID} ${OS_TYPE}:${OS_VER} ${INIT}
