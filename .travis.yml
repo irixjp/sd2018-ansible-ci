@@ -8,6 +8,8 @@ python:
 
 env:
   matrix:
+    - ANS_VER=2.9.4 OS_TYPE=centos OS_VER=8.1.1911 INIT=/sbin/init
+    - ANS_VER=2.9.4 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
     - ANS_VER=2.7.0 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
     - ANS_VER=2.6.4 OS_TYPE=centos OS_VER=7.4.1708 INIT=/sbin/init
     - ANS_VER=2.6.3 OS_TYPE=centos OS_VER=7.5.1804 INIT=/sbin/init
